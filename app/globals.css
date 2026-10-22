@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-extrabold;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid #ff6b00;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: #ff6b00;
+    color: #15161b;
+  }
+}
+
+@layer components {
+  .page-x {
+    @apply mx-auto w-full max-w-page px-5 sm:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-7 py-4 text-[0.95rem] font-bold transition-colors duration-200;
+  }
+
+  .btn-orange {
+    @apply bg-orange text-ink hover:bg-ink hover:text-cream;
+  }
+
+  .btn-ink {
+    @apply bg-ink text-cream hover:bg-orange hover:text-ink;
+  }
+
+  .btn-line {
+    @apply border-2 border-ink text-ink hover:bg-ink hover:text-cream;
+  }
+
+  .link-line {
+    @apply font-semibold underline decoration-2 underline-offset-[6px] decoration-orange transition-colors hover:decoration-ink;
+  }
+
+  .display {
+    font-size: clamp(2.2rem, 5vw, 4.25rem);
+  }
+}
+
+/* Boîte de dialogue : entrée et sortie */
+.quote-dialog::backdrop,
+.zoom-dialog::backdrop {
+  background: rgba(21, 22, 27, 0.62);
+  backdrop-filter: blur(3px);
+  animation: fade-in 0.25s ease;
+}
+.quote-dialog[open] {
+  animation: dialog-in 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.quote-dialog[data-closing="true"] {
+  animation: dialog-out 0.17s ease forwards;
+}
+.quote-dialog[data-closing="true"]::backdrop {
+  animation: fade-out 0.17s ease forwards;
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+}
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Galerie en défilement infini (ordinateur) */
+.marquee {
+  --w: clamp(280px, 23vw, 380px);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 90s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-set {
+  display: flex;
+  align-items: stretch;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-dialog,
+  .quote-dialog::backdrop,
+  .zoom-dialog::backdrop {
+    animation: none !important;
+  }
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-set[aria-hidden="true"] {
+    display: none;
+  }
+}
